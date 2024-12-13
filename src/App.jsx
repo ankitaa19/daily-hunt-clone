@@ -1,40 +1,30 @@
-import React, { useState } from 'react';
-import { Button } from '@mui/material';
-import LoginModal from './components/LoginModal';
-import RegisterModal from './components/RegisterModal';
-import ForYouPage from './components/ForYouPage';
-import './App.css';
+import React, { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar";
+import Manynews from "./Manynews/Manynews";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Foryou from "./components/Foryou/Foryou";
 
 function App() {
-  const [openLogin, setOpenLogin] = useState(false);
-  const [openRegister, setOpenRegister] = useState(false);
-
-  const handleOpenLogin = () => setOpenLogin(true);
-  const handleCloseLogin = () => setOpenLogin(false);
-  
-  const handleOpenRegister = () => setOpenRegister(true);
-  const handleCloseRegister = () => setOpenRegister(false);
+  useEffect(() => {
+    document.title = "DailyHunt";
+    const faviconLink = document.querySelector("link[rel='icon']");
+    if (faviconLink) {
+      faviconLink.href =
+        "https://images.sftcdn.net/images/t_app-icon-m/p/ed7c8226-a4ec-11e6-927f-00163ed833e7/2071148802/newshunt-logo";
+    }
+  }, []);
 
   return (
-    <div>
-      <header className="app-header">
-        <h1>DailyHunt</h1>
-        <div className="header-buttons">
-          <Button variant="outlined" onClick={handleOpenLogin}>
-            Login
-          </Button>
-          <Button variant="outlined" onClick={handleOpenRegister}>
-            Register
-          </Button>
-        </div>
-      </header>
-
-      {/* Display the For You page and Cricket page */}
-      <ForYouPage />
-      <CricketPage /> {/* Ensure this is rendering properly */}
-
-      <LoginModal open={openLogin} onClose={handleCloseLogin} />
-      <RegisterModal open={openRegister} onClose={handleCloseRegister} />
+    <div className="App">
+      <Navbar />
+      <div style={{ display: "flex", width: "100%" }}>
+        <Sidebar />
+        <Routes>
+          <Route path="/" element={<Foryou />} />
+          <Route path="/:news" element={<Manynews />} />
+        </Routes>
+      </div>
     </div>
   );
 }
