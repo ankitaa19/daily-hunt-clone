@@ -1,17 +1,26 @@
-// src/components/Sidebar.jsx
 import React from 'react';
-import { Box, Text } from '@chakra-ui/react';
-
+import { useNavigate } from 'react-router-dom';
+import './Sidebar.css';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   return (
-    <Box width="250px" bg="gray.100" p="4">
-      <Text fontSize="lg" mb="4">Sidebar</Text>
-      {/* Add more items as needed */}
-      <Text>Item 1</Text>
-      <Text>Item 2</Text>
-      <Text>Item 3</Text>
-    </Box>
+    <div className="sidebar-container">
+      <div className="sidebar-heading">Categories</div>
+      <div className="sidebar-item item-1" onClick={() => handleNavigation('/for-you')}>For You</div>
+      <div className="sidebar-item item-2" onClick={() => handleNavigation('/sports')}>Sports</div>
+      <div className="sidebar-item item-3" onClick={() => handleNavigation('/business')}>Business</div>
+      <div className="sidebar-item item-4" onClick={() => handleNavigation('/technology')}>Technology</div>
+      <div className="sidebar-item item-5" onClick={() => handleNavigation('/entertainment')}>Entertainment</div>
+      <div className="sidebar-item item-6" onClick={() => handleNavigation('/education')}>Education</div>
+      <div className="sidebar-item item-7" onClick={() => handleNavigation('/crimes')}>Crimes</div>
+      <div className="sidebar-item item-8" onClick={() => handleNavigation('/travel')}>Travel</div>
+    </div>
   );
 };
 

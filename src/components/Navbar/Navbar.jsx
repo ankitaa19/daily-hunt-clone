@@ -1,13 +1,5 @@
 import React, { useRef } from "react";
-import {
-  Menu,
-  MenuItem,
-  Button,
-  Image,
-  Box,
-  Stack,
-  Input,
-} from "@chakra-ui/react";
+import { Menu, MenuItem, Button, Image, Box, Stack, Input } from "@chakra-ui/react";
 import { TriangleDownIcon, SearchIcon, StarIcon } from "@chakra-ui/icons";
 import { useNavigate, Link } from "react-router-dom";
 import "./Navbar.css";
@@ -129,4 +121,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
