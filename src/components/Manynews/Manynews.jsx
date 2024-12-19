@@ -1,47 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom'; // Import useLocation for route checking
+import { useParams } from 'react-router-dom';
 import './Manynews.css';
 
 const Manynews = () => {
-    const [news, setNews] = useState([]);
-    const location = useLocation(); // Get the current location
+    const { news } = useParams();
+    const [newsData, setNewsData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const newsEndpoints = {
+        sports: 'http://localhost:5005/api/sports-news',
+        business: 'http://localhost:5005/api/business',
+        technology: 'http://localhost:5005/api/technology',
+        entertainment: 'http://localhost:5005/api/entertainment',
+        education: 'http://localhost:5005/api/education',
+        crimes: 'http://localhost:5005/api/crimes',
+        travel: 'http://localhost:5005/api/travel', // Example for additional category
+    };
 
     const fetchNews = async () => {
+        setLoading(true);
+        setError(null);
+
+        const endpoint = newsEndpoints[news];
+
+        if (!endpoint) {
+            setLoading(false);
+            setError('Invalid news type');
+            return;
+        }
+
         try {
-            const response = await fetch('http://localhost:5005/api/sports');
+            const response = await fetch(endpoint);
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            setNews(data);
+            setNewsData(data);
         } catch (error) {
-            console.error('Error fetching data:', error);
+            setError(`Error fetching news: ${error.message}`);
+            console.error("Fetch error: ", error); // Log error for debugging
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        if (location.pathname === '/sports') { // Fetch news only if we are on the sports route
-            fetchNews();
-        }
-    }, [location.pathname]); // Run the effect whenever the path changes
-
-    // Only render news if on the sports route
-    if (location.pathname !== '/sports') {
-        return null; // Hide if not on the sports page
-    }
+        fetchNews();
+    }, [news]);
 
     return (
         <div className="container">
-            {news.length > 0 ? (
-                news.map((item, index) => (
+            {loading && <p>Loading...</p>}
+            {error && <p>Error: {error}</p>}
+            {!loading && newsData.length === 0 && <p>No news available.</p>}
+            {newsData.length > 0 && !loading && 
+                newsData.map((item, index) => (
                     <div key={index} className="news-item">
-                        <h3>{item.name}</h3>
+                        <h3>{item.title}</h3>
+                        <p>{item.description || 'No description available.'}</p>
                         <p>Date: {new Date(item.publishedAt).toLocaleDateString() || 'Invalid Date'}</p>
                     </div>
                 ))
-            ) : (
-                <p>No sports news available.</p> // Message when no news is present
-            )}
+            }
         </div>
     );
 };

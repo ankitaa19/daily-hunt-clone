@@ -1,12 +1,14 @@
-import React, { useRef } from "react";
-import { Menu, MenuItem, Button, Image, Box, Stack, Input } from "@chakra-ui/react";
-import { TriangleDownIcon, SearchIcon, StarIcon } from "@chakra-ui/icons";
+import React, { useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const value = useRef();
+  const [isLoginOpen, setLoginOpen] = useState(false);
+  const [isRegisterOpen, setRegisterOpen] = useState(false);
+  const [isUploadOpen, setUploadOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const getInput = () => {
     const inputValue = value.current.value;
@@ -21,102 +23,120 @@ const Navbar = () => {
     }
   };
 
+  const handleImageUpload = (e) => {
+    setSelectedImage(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedImage) {
+      alert("Please select an image to upload.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", selectedImage);
+
+    try {
+      const response = await fetch("http://localhost:5005/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Image uploaded successfully!");
+        setUploadOpen(false); // Close the modal after successful upload
+      } else {
+        alert(data.message || "Failed to upload image. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Something went wrong. Please try again later.");
+    }
+  };
+
   return (
-    <div className="fix">
-      <div className="navbar">
-        <Box
-          display={"flex"}
-          alignItems="center"
-          justifyContent={"space-between"}
-          ml={["0", "15%"]}
-        >
-          <Link to="/">
-            <Image
-              src="https://m.dailyhunt.in/assets/img/desktop/logo.svg?mode=pwa&ver=2.0.39"
-              alt="DailyHunt Logo"
-              w={["24", "fit-content"]}
-            />
-          </Link>
-          <Menu>
-            <Button
-              bg="rgb(243, 243, 243)"
-              fontSize={16}
-              rightIcon={<TriangleDownIcon />}
-              display={["none", "inline-flex"]}
-              onClick={() => console.log("Menu clicked")}
-            >
-              News
-            </Button>
-            <Box bg="white" shadow="md" borderRadius="md" p={2}>
-              <MenuItem>
-                <Image
-                  boxSize="2rem"
-                  borderRadius="full"
-                  src="https://m.dailyhunt.in/assets/img/desktop/news_viral.svg?mode=pwa&ver=2.0.39"
-                  alt="Viral"
-                  mr="12px"
-                />
-                Viral
-              </MenuItem>
-              <MenuItem>
-                <Image
-                  boxSize="2rem"
-                  borderRadius="full"
-                  src="https://m.dailyhunt.in/assets/img/desktop/news_video.svg?mode=pwa&ver=2.0.39"
-                  alt="Video"
-                  mr="12px"
-                />
-                Video
-              </MenuItem>
-            </Box>
-          </Menu>
-        </Box>
-        <Stack w={["50%", "20%"]} ml={["0px", "6"]} spacing={4}>
-          <Box display={"flex"} alignItems={"center"}>
-            <Input
-              borderColor="gray.400"
-              type="search"
-              placeholder="Search"
-              ref={value}
-              h={["8", ""]}
-              onKeyDown={handleKeyDown}
-            />
-            <Button
-              variant="outline"
-              onClick={getInput}
-              ml="2"
-              borderColor="gray.400"
-              size={["sm", "sm"]}
-              color="gray.400"
-            >
-              <SearchIcon color="gray.400" h={["8", "4"]} />
-            </Button>
-          </Box>
-        </Stack>
-        <Link to="/save">
-          <Button
-            rightIcon={<StarIcon size={["xs", "sm"]} />}
-            variant="solid"
-            size={["xs", "md"]}
-            borderRadius={["base", "md"]}
-            colorScheme="blue"
-            padding={"4"}
-          >
-            Saved
-          </Button>
-        </Link>
-        <Box w={["0px", "20"]} display={["none", "flex"]} className="right">
-          <img
-            src="https://m.dailyhunt.in/assets/img/desktop/header_notify_icn.svg?mode=pwa&ver=2.0.39"
-            alt="Notifications"
+    <nav>
+      {/* Logo Section */}
+      <Link to="/">
+        <img
+          src="https://m.dailyhunt.in/assets/img/desktop/logo.svg?mode=pwa&ver=2.0.39"
+          alt="DailyHunt Logo"
+        />
+      </Link>
+
+      {/* Navigation and Search Section */}
+      <div className="nav-menu">
+        <button>News</button>
+        <div>
+          <input
+            type="text"
+            placeholder="Search"
+            ref={value}
+            onKeyDown={handleKeyDown}
           />
-          <img
-            src="https://m.dailyhunt.in/assets/img/desktop/header_lang_icn.svg?mode=pwa&ver=2.0.39"
-            alt="Language"
-          />
-        </Box>
+          <button onClick={getInput}>Search</button>
+        </div>
       </div>
-    </div>
+
+      {/* Right Section */}
+      <div className="nav-actions">
+        <Link to="/save">
+          <button>Saved</button>
+        </Link>
+        <img
+          src="https://m.dailyhunt.in/assets/img/desktop/header_notify_icn.svg?mode=pwa&ver=2.0.39"
+          alt="Notifications"
+        />
+        <img
+          src="https://m.dailyhunt.in/assets/img/desktop/header_lang_icn.svg?mode=pwa&ver=2.0.39"
+          alt="Language"
+        />
+        <button onClick={() => setLoginOpen(true)}>Login</button>
+        <button onClick={() => setRegisterOpen(true)}>Register</button>
+        <button onClick={() => setUploadOpen(true)} style={{ fontSize: "20px" }}>
+          +
+        </button>
+      </div>
+
+      {/* Login Modal */}
+      {isLoginOpen && (
+        <div className="modal" onClick={() => setLoginOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Login</h3>
+            <input placeholder="Email" />
+            <input placeholder="Phone Number" />
+            <button>Send OTP</button>
+          </div>
+        </div>
+      )}
+
+      {/* Register Modal */}
+      {isRegisterOpen && (
+        <div className="modal" onClick={() => setRegisterOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Register</h3>
+            <input placeholder="Username" />
+            <input placeholder="Age" type="date" />
+            <input placeholder="Gender" />
+            <input placeholder="Email" />
+            <input placeholder="Phone Number" />
+            <button>Register</button>
+          </div>
+        </div>
+      )}
+
+      {/* Upload Modal */}
+      {isUploadOpen && (
+        <div className="modal" onClick={() => setUploadOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Upload Image</h3>
+            <input type="file" accept="image/*" onChange={handleImageUpload} />
+            <button onClick={handleUpload}>Upload</button>
+          </div>
+        </div>
+      )}
+    </nav>
   );
 };
 
