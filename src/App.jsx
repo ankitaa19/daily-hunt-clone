@@ -1,23 +1,17 @@
-import React, { useEffect } from "react";
+// App.jsx
+import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Manynews from "./components/Manynews/Manynews.jsx";
 import Sidebar from "./components/Sidebar/Sidebar";
 import News from "./components/news/News.jsx";
-import Login from "./components/Login.jsx";
-import Register from "./components/Register.jsx";
+import Signup from "./components/Signup"; // Import the new Signup component
+import { auth } from "./firebase.config"; 
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-function App() {
+const MainApp = () => {
   useEffect(() => {
-    // Set the document title
     document.title = "Daily-Hunt";
-    
-    // Set the favicon
-    const faviconLink = document.querySelector("link[rel='icon']");
-    if (faviconLink) {
-      faviconLink.href =
-        "https://images.sftcdn.net/images/t_app-icon-m/p/ed7c8226-a4ec-11e6-927f-00163ed833e7/2071148802/newshunt-logo";
-    }
   }, []);
 
   return (
@@ -26,16 +20,24 @@ function App() {
       <div style={{ display: "flex", width: "100%" }}>
         <Sidebar />
         <main style={{ flex: 1 }}>
-          {/* Ensure main content takes the remaining space */}
           <Routes>
-            <Route path="/" element={<News />} /> {/* Default route */}
-            <Route path="/news" element={<News />} /> {/* Static News route */}
-            <Route path="/:news" element={<Manynews />} /> {/* Dynamic route for categories */}
+            <Route path="/" element={<News />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/:news" element={<Manynews />} />
+            <Route path="/signup" element={<Signup />} /> {/* Route for signup */}
           </Routes>
         </main>
       </div>
     </div>
   );
-}
+};
+
+const App = () => {
+  return (
+    <>
+      <MainApp />
+    </>
+  );
+};
 
 export default App;

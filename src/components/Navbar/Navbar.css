@@ -1,145 +1,129 @@
-/* General Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-/* Navbar Styling */
+/* Navbar Container */
 nav {
-  position: fixed; /* Keeps the navbar at the top */
-  top: 0;
-  left: 0;
-  width: 100%; /* Ensures the navbar spans the full width */
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 30px 20px;
-  background-color: white;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Ensures the navbar stays on top of other elements */
+  align-items: center;
+  padding: 15px 30px;
+  background-color:  #f2f2f2; /* Dark background */
+  color: white; /* Text color */
+  position: fixed; /* Fixed position */
+  top: 0; /* Stick to the top */
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensure it is above other content */
 }
+
 
 /* Logo Section */
 nav img {
-  width: 120px;
+  height: 40px; /* Logo height */
+  z-index: 1001; /* Higher than the navbar's z-index */
 }
 
-/* Navigation and Search Section */
+/* Navigation Menu */
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 20px;
 }
 
-.nav-menu input[type="text"] {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.nav-menu button {
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 8px 12px;
+.nav-menu button 
+{
+  margin: 0 15px;
+  padding: 10px 15px;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 16px;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: all 0.3s ease;
+  transition: color 0.3s;
 }
 
 .nav-menu button:hover {
-  background-color: #f0f0f0;
+  color: #61dafb; /* Light blue on hover */
+}
+
+/* Search Input */
+.nav-menu input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #61dafb;
+  margin-right: 10px;
+  outline: none;
 }
 
 /* Right Section */
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
 }
 
 .nav-actions button {
-  background-color: #38a169;
-  color: white;
+  margin-left: 15px;
+  padding: 10px 15px;
   border: none;
-  padding: 8px 12px;
+  background-color: #61dafb; /* Button color */
+  color: black;
+  font-size: 16px;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
 .nav-actions button:hover {
-  background-color: #2f855a;
+  background-color: #21a1f1; /* Darker blue on hover */
 }
 
-.nav-actions img {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.nav-actions img:hover {
-  transform: scale(1.1);
-}
-
-/* Modals */
+/* Modal Styles */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
   z-index: 1000;
 }
 
 .modal-content {
-  background-color: white;
+  background: white;
   padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  max-width: 90%;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.modal-content h3 {
+  margin-bottom: 15px;
+}
+
+/* Input Fields in Modals */
 .modal-content input {
-  display: block;
   width: 100%;
-  padding: 8px 12px;
-  margin-bottom: 12px;
+  padding: 10px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 5px;
 }
 
+/* Submit Buttons in Modals */
 .modal-content button {
   width: 100%;
   padding: 10px;
-  background-color: #3182ce;
-  color: white;
+  background-color: #61dafb;
+  color: black;
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .modal-content button:hover {
-  background-color: #2b6cb0;
+  background-color: #21a1f1; /* Darker blue on hover */
 }
 
-/* To prevent content from hiding behind the navbar */
+/* Add padding to the top of the body to avoid content going behind the navbar */
 body {
-  padding-top: 60px; /* Add padding equal to the navbar height */
+  padding-top: 80px; /* Adjust this value according to your navbar height */
 }

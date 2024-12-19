@@ -50,19 +50,25 @@ const Manynews = () => {
     }, [news]);
 
     return (
-        <div className="container">
-            {loading && <p>Loading...</p>}
-            {error && <p>Error: {error}</p>}
-            {!loading && newsData.length === 0 && <p>No news available.</p>}
-            {newsData.length > 0 && !loading && 
-                newsData.map((item, index) => (
-                    <div key={index} className="news-item">
-                        <h3>{item.title}</h3>
-                        <p>{item.description || 'No description available.'}</p>
-                        <p>Date: {new Date(item.publishedAt).toLocaleDateString() || 'Invalid Date'}</p>
-                    </div>
-                ))
-            }
+        <div className="background-container">
+            <video className="background-video" autoPlay loop muted>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+                Your browser does not support HTML5 video.
+            </video>
+            <div className="container">
+                {loading && <p>Loading...</p>}
+                {error && <p>Error: {error}</p>}
+                {!loading && newsData.length === 0 && <p>No news available.</p>}
+                {newsData.length > 0 && !loading && 
+                    newsData.map((item, index) => (
+                        <div key={index} className="news-item">
+                            <h3>{item.title}</h3>
+                            <p>{item.description || 'No description available.'}</p>
+                            <p>Date: {new Date(item.publishedAt).toLocaleDateString() || 'Invalid Date'}</p>
+                        </div>
+                    ))
+                }
+            </div>
         </div>
     );
 };

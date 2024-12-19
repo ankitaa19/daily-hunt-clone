@@ -1,5 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { auth } from "../../firebase.config"; // Adjust the path as necessary
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -7,8 +9,17 @@ const Navbar = () => {
   const value = useRef();
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
-  const [isUploadOpen, setUploadOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [user, setUser] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Check user authentication state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const getInput = () => {
     const inputValue = value.current.value;
@@ -23,41 +34,34 @@ const Navbar = () => {
     }
   };
 
-  const handleImageUpload = (e) => {
-    setSelectedImage(e.target.files[0]);
+  const handleLogin = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setLoginOpen(false);
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      alert("Failed to log in: " + error.message);
+    }
   };
 
-  const handleUpload = async () => {
-    if (!selectedImage) {
-      alert("Please select an image to upload.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("image", selectedImage);
-
+  const handleRegister = async () => {
     try {
-      const response = await fetch("http://localhost:5005/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        alert("Image uploaded successfully!");
-        setUploadOpen(false); // Close the modal after successful upload
-      } else {
-        alert(data.message || "Failed to upload image. Please try again.");
-      }
+      await createUserWithEmailAndPassword(auth, email, password);
+      setRegisterOpen(false);
+      setEmail("");
+      setPassword("");
     } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Something went wrong. Please try again later.");
+      alert("Failed to register: " + error.message);
     }
+  };
+
+  const handleLogout = async () => {
+    await auth.signOut();
   };
 
   return (
     <nav>
-      {/* Logo Section */}
       <Link to="/">
         <img
           src="https://m.dailyhunt.in/assets/img/desktop/logo.svg?mode=pwa&ver=2.0.39"
@@ -65,7 +69,6 @@ const Navbar = () => {
         />
       </Link>
 
-      {/* Navigation and Search Section */}
       <div className="nav-menu">
         <button>News</button>
         <div>
@@ -79,7 +82,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Right Section */}
       <div className="nav-actions">
         <Link to="/save">
           <button>Saved</button>
@@ -92,11 +94,21 @@ const Navbar = () => {
           src="https://m.dailyhunt.in/assets/img/desktop/header_lang_icn.svg?mode=pwa&ver=2.0.39"
           alt="Language"
         />
-        <button onClick={() => setLoginOpen(true)}>Login</button>
-        <button onClick={() => setRegisterOpen(true)}>Register</button>
-        <button onClick={() => setUploadOpen(true)} style={{ fontSize: "20px" }}>
-          +
-        </button>
+
+        {/* Show user profile button if logged in */}
+        {user ? (
+          <div>
+            <button onClick={handleLogout}>Logout</button>
+            <Link to="/user-profile">
+              <button>{user.email}</button>
+            </Link>
+          </div>
+        ) : (
+          <div>
+            <button onClick={() => setLoginOpen(true)}>Login</button>
+            <button onClick={() => setRegisterOpen(true)}>Register</button>
+          </div>
+        )}
       </div>
 
       {/* Login Modal */}
@@ -104,9 +116,19 @@ const Navbar = () => {
         <div className="modal" onClick={() => setLoginOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>Login</h3>
-            <input placeholder="Email" />
-            <input placeholder="Phone Number" />
-            <button>Send OTP</button>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button onClick={handleLogin}>Login</button>
           </div>
         </div>
       )}
@@ -116,23 +138,19 @@ const Navbar = () => {
         <div className="modal" onClick={() => setRegisterOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>Register</h3>
-            <input placeholder="Username" />
-            <input placeholder="Age" type="date" />
-            <input placeholder="Gender" />
-            <input placeholder="Email" />
-            <input placeholder="Phone Number" />
-            <button>Register</button>
-          </div>
-        </div>
-      )}
-
-      {/* Upload Modal */}
-      {isUploadOpen && (
-        <div className="modal" onClick={() => setUploadOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>Upload Image</h3>
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
-            <button onClick={handleUpload}>Upload</button>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button onClick={handleRegister}>Register</button>
           </div>
         </div>
       )}

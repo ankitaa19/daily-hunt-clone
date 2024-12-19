@@ -1,7 +1,7 @@
 /* Sidebar container */
 .sidebar-container {
     width: 250px; /* Fixed width */
-    background-color: #ffffff; /* White background */
+    background-color: #f2f2f2; /* White background */
     padding: 15px; /* Consistent padding */
     border-right: 1px solid #e2e2e2; /* Subtle border on the right */
     height: 100vh; /* Full height */
@@ -15,14 +15,6 @@
     z-index: 1; /* Ensure sidebar is on top of other elements */
 }
 
-/* Main content area */
-.main-content {
-    margin-left: 250px; /* Space for sidebar */
-    padding: 20px; /* Padding for main content */
-    height: calc(100vh - 60px); /* Full height minus Navbar height */
-    overflow-y: auto; /* Allow vertical scrolling */
-}
-
 /* Sidebar heading */
 .sidebar-heading {
     font-size: 1.5rem;
@@ -31,7 +23,6 @@
     color: #333; /* Darker text for readability */
     text-transform: uppercase; /* Stylish look */
     letter-spacing: 1px; /* Space between letters */
-    z-index: 2; /* Ensure the heading is on top */
 }
 
 /* Sidebar items */
@@ -46,8 +37,7 @@
     width: calc(100% - 32px); /* Ensure full-width for items */
 }
 
-/* Hover effects for different sidebar items */
-/* Sidebar items hover effects for unique colors */
+/* Unique hover effects for different sidebar items */
 .item-1:hover { background-color: #ffebcd; } /* Blanched Almond */
 .item-2:hover { background-color: #add8e6; } /* Light Blue */
 .item-3:hover { background-color: #90ee90; } /* Light Green */
@@ -55,7 +45,12 @@
 .item-5:hover { background-color: #ffe4e1; } /* Misty Rose */
 .item-6:hover { background-color: #ffdead; } /* Navajo White */
 .item-7:hover { background-color: #d3d3d3; } /* Light Gray */
-.item-8:hover { background-color: #e6e6fa; } /* Lavender */
+
+/* Active state styling */
+.sidebar-item.active {
+    font-weight: bold; /* Make active item bold */
+    background-color: #d0d0d0; /* Change active item background */
+}
 
 /* Sidebar item icon (if needed) */
 .sidebar-item img {

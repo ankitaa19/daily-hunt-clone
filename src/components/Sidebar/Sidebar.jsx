@@ -14,43 +14,43 @@ const Sidebar = () => {
         <div className="sidebar-container">
             <div className="sidebar-heading">Categories</div>
             <div 
-                className={`sidebar-item ${location.pathname === '/sports' ? 'active' : ''}`} 
+                className={`sidebar-item item-1 ${location.pathname === '/sports' ? 'active' : ''}`} 
                 onClick={() => handleNavigation('/sports')}
             >
                 Sports
             </div>
             <div 
-                className={`sidebar-item ${location.pathname === '/business' ? 'active' : ''}`} 
+                className={`sidebar-item item-2 ${location.pathname === '/business' ? 'active' : ''}`} 
                 onClick={() => handleNavigation('/business')}
             >
                 Business
             </div>
             <div 
-                className={`sidebar-item ${location.pathname === '/technology' ? 'active' : ''}`} 
+                className={`sidebar-item item-3 ${location.pathname === '/technology' ? 'active' : ''}`} 
                 onClick={() => handleNavigation('/technology')}
             >
                 Technology
             </div>
             <div 
-                className={`sidebar-item ${location.pathname === '/entertainment' ? 'active' : ''}`} 
+                className={`sidebar-item item-4 ${location.pathname === '/entertainment' ? 'active' : ''}`} 
                 onClick={() => handleNavigation('/entertainment')}
             >
                 Entertainment
             </div>
             <div 
-                className={`sidebar-item ${location.pathname === '/education' ? 'active' : ''}`} 
+                className={`sidebar-item item-5 ${location.pathname === '/education' ? 'active' : ''}`} 
                 onClick={() => handleNavigation('/education')}
             >
                 Education
             </div>
             <div 
-                className={`sidebar-item ${location.pathname === '/crimes' ? 'active' : ''}`} 
+                className={`sidebar-item item-6 ${location.pathname === '/crimes' ? 'active' : ''}`} 
                 onClick={() => handleNavigation('/crimes')}
             >
                 Crimes
             </div>
             <div 
-                className={`sidebar-item ${location.pathname === '/travel' ? 'active' : ''}`} 
+                className={`sidebar-item item-7 ${location.pathname === '/travel' ? 'active' : ''}`} 
                 onClick={() => handleNavigation('/travel')}
             >
                 Travel
